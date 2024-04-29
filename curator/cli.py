@@ -456,8 +456,12 @@ def simulate(config: DictConfig):
     # Initiate simulators
     if config.simulator.method == "md":
         from curator.simulator.md import MD
-        simulator = MD(config.simulator,MLcalc,PE)
-    
+        from curator.simulator import FinishedException
+        try:
+            simulator = MD(config.simulator,MLcalc,PE)
+        except FinishedException as e:
+            pass
+
     elif config.simulator.method == "neb":
         from curator.simulator.neb import NEB
         simulator = NEB(config.simulator,MLcalc,PE)

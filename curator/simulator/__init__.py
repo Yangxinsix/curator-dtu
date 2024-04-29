@@ -62,6 +62,9 @@ class PrintEnergy:  # store a reference to atoms in the definition.
         
         return uncertainty
 
+class FinishedException(Exception):
+    pass
+
 class MDControl:
     """Class to control MD simulation based on uncertainty."""
     def __init__(self,config: DictConfig,printenergy: PrintEnergy,atoms: ase.Atom) -> None:
@@ -90,7 +93,7 @@ class MDControl:
         if uncertainty['threshold'] > self.threshold_maxvalue:
             self.logger.error("Too large uncertainty!")
             if self.printenergy.calls + self.printenergy.uncertain_calls > self.min_steps:
-                raise RuntimeError("Done")
+                raise FinishedException("Done")
             else:
                 raise RuntimeError("Too large uncertainty!")
         elif uncertainty['threshold'] > self.threshold_value:
@@ -100,7 +103,7 @@ class MDControl:
             if self.printenergy.uncertain_calls > self.num_uncertain:
                 self.logger.error(f"More than {self.num_uncertain} uncertain structures are collected!")
                 if self.printenergy.calls + self.printenergy.uncertain_calls > self.min_steps:
-                    raise RuntimeError("Done")
+                    raise FinishedException("Done")
                 else:
                     raise RuntimeError(f"More than {self.num_uncertain} uncertain structures are collected!")
 
