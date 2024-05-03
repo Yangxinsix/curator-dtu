@@ -6,6 +6,7 @@ import numpy as np
 import ase
 from ase import units
 from ase.io import Trajectory
+from ase.io.trajectory import TrajectoryWriter
 from .uncertainty import GetUncertainty
 
 class PrintEnergy:  # store a reference to atoms in the definition.
@@ -97,7 +98,7 @@ class MDControl:
             else:
                 raise RuntimeError("Too large uncertainty!")
         elif uncertainty['threshold'] > self.threshold_value:
-            if self.collect_traj:
+            if isinstance(self.collect_traj, TrajectoryWriter):
                 self.collect_traj.write(atoms)
 
             if self.printenergy.uncertain_calls > self.num_uncertain:
