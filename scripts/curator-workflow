@@ -200,11 +200,17 @@ def select(deps: list[Task],
         # Create new directory
         run_path = mkdir(conf, task_type, iteration, name)
 
-        # Save config file
+        # Parse arguments
         conf_copy = merge_conf_params(conf, params)
+        if 'uncertain_traj' in conf_copy.uncertainty.keys():
+            pool_traj_name = conf_copy.uncertainty.uncertain_traj 
+        else:
+            pool_traj_name = 'MD.traj'
+
+        # Save config file
         conf_copy.select.model_path = str(cwd/Path(conf_copy.train.run_path) / f'iter_{iteration}')
         conf_copy.select.run_path = './'
-        conf_copy.select.pool_set = str(cwd/f'simulate/iter_{iteration}/{name}/MD.traj')
+        conf_copy.select.pool_set = str(cwd/f'simulate/iter_{iteration}/{name}/{pool_traj_name}')
         conf_copy.select.train_set = conf_copy.data.datapath
         conf_copy = strip_yaml_file(conf_copy, yaml_sections, task_type)           
         save_file = run_path / 'user_cfg.yaml'
