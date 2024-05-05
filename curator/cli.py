@@ -632,10 +632,10 @@ def label(config: DictConfig):
     # Set up calculator
     if config.labeling_method.method == 'vasp':
         from curator.labeling.vasp import VASP
-        label = VASP(config.labeling_method.parameters)
+        label = VASP(OmegaConf.to_container(config.labeling_method.parameters))
     elif config.labeling_method.method== 'gpaw':
         from curator.labeling.gpaw import GPAW
-        label = GPAW(config.labeling_method.parameters)
+        label = GPAW(OmegaConf.to_container(config.labeling_method.parameters))
     elif config.user_method:
         raise NotImplementedError('User defined method is not implemented yet!')
     
