@@ -107,6 +107,16 @@ def train(config: DictConfig) -> None:
         model_compiled.save(f"{config.run_path}/compiled_model.pt", _extra_files=metadata)
         log.debug(f"Deploying compiled model at <{config.run_path}/compiled_model.pt>")
 
+        torch.save(
+                {
+                    "model": model.state_dict(),
+                    "model_params": config.model,
+                    "data_params": config.data,
+                    "device": config.device,
+                },
+                os.path.join(config.run_path, "best_model.pth"),
+            )
+
 # Training without Pytorch Lightning
 @hydra.main(config_path="configs", config_name="train", version_base=None)
 def tmp_train(config: DictConfig):

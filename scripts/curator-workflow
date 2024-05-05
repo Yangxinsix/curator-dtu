@@ -125,8 +125,7 @@ def train(deps: list[Task],
         OmegaConf.save(config=conf_copy, f=save_file)
         # Run task
         tasks.append(run(
-            shell='curator-tmptrain',
-            #shell='curator-train', 
+            shell='curator-train', 
             nodename=nodename,
             cores=cores, 
             tmax=tmax,
